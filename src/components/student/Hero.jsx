@@ -85,6 +85,8 @@ const Hero = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          centerMode: false,
+          variableWidth: false,
         },
       },
     ],
@@ -107,7 +109,7 @@ const Hero = () => {
     };
 
     const TopicCard = ({ topic }) => (
-      <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200 mx-2 my-4 relative min-h-[220px] w-full max-w-xs flex flex-col min-w-[220px]">
+      <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200 mx-2 my-4 relative min-h-[180px] w-full max-w-full flex flex-col sm:min-w-[220px] sm:max-w-xs">
         {/* Heart icon top-right (clickable, filled if in wishlist) */}
         <span
           className="absolute top-3 right-3 text-red-500 text-xl cursor-pointer"
@@ -218,40 +220,37 @@ const Hero = () => {
   console.log('Homepage Data:', homepageData);
 
   return (
-    <div className="flex flex-col items-start justify-start w-full md:pt-10 pt-0  md:px-0 space-y-0 text-left bg-white">
+    <div className="flex flex-col items-start justify-start w-full md:pt-10 pt-0 md:px-0 space-y-0 text-left bg-white">
       {/* Header with Wishlist Heart Icon */}
-      
-      <div className='px-10 md:px-10'>
-         <h1
-          className="relative font-bold max-w-3xl mx-10 text-[46px] font-heebo text-[#24292D]"
-         
+      <div className="px-4 md:px-10 w-full">
+        <h1
+          className="relative font-bold max-w-3xl mx-auto md:mx-10 text-[32px] md:text-[46px] leading-tight md:leading-[54px] font-heebo text-[#24292D] text-center md:text-left mt-6 md:mt-0"
         >
           {homepageData?.hero?.title || defaultContent.title}
         </h1>
-        <p className="md:block hidden text-black max-w-full mx-10 pt-10 font-outfit text-[16px] font-medium leading-[28px]">
+        <p className="block text-black max-w-full mx-auto md:mx-10 pt-4 md:pt-10 font-outfit text-[15px] md:text-[16px] font-medium leading-[22px] md:leading-[28px] text-center md:text-left">
           {homepageData?.hero?.description || defaultContent.description}
         </p>
-        <p className="text-black max-w-full mx-10 py-4 mt-4 font-outfit text-[16px] font-medium leading-[28px]">
+        <p className="text-black max-w-full mx-auto md:mx-10 py-2 md:py-4 mt-2 md:mt-4 font-outfit text-[15px] md:text-[16px] font-medium leading-[22px] md:leading-[28px] text-center md:text-left">
           {homepageData?.hero?.subtitle || defaultContent.subtitle}
         </p>
-        <div className='h-8'/>
-        </div>
+        <div className='h-4 md:h-8'/>
+      </div>
 
-        {/* Most Popular Topics Section */}
+      {/* Most Popular Topics Section */}
       {topics.length > 0 && (
-        <div className="px-10 md:px-10 bg-gradient-to-r w-full from-[rgba(69,122,238,0)] to-[rgba(0,40,128,1)]">
-          <h1 className="p-7  pb-0 font-bold text-gray-800 mb-4 md:text-home-heading-large text-home-heading-small">
+        <div className="px-4 md:px-10 bg-gradient-to-r w-full from-[rgba(69,122,238,0)] to-[rgba(0,40,128,1)]">
+          <h1 className="pt-6 md:p-7 pb-0 font-bold text-gray-800 mb-2 md:mb-4 text-[22px] md:text-home-heading-large text-center md:text-left">
             {homepageData?.sections?.popularTopics?.title || "Most Popular Topics"}
           </h1>
-          <p className="p-7 pb-0 pt-0 text-lg text-gray-500 mb-6">
+          <p className="pb-0 pt-0 text-[15px] md:text-lg text-gray-500 mb-4 md:mb-6 text-center md:text-left">
             {homepageData?.sections?.popularTopics?.subtitle || "Choose from hundreds of topics from specialist organizations"}
           </p>
           <div className="relative"> 
             <TopicsDisplay topics={topics} />
           </div>
-            <div className='h-8'/>
+          <div className='h-4 md:h-8'/>
         </div>
-        
       )}
     </div>
   );
