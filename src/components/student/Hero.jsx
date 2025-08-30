@@ -94,6 +94,16 @@ const Hero = () => {
 
   // Component to render topics - either as slider or grid
   const TopicsDisplay = ({ topics }) => {
+    const scrollRef = React.useRef(null);
+    const CARD_WIDTH = 320; // px, matches w-80
+    const scrollByCard = (direction) => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollBy({
+          left: direction === 'next' ? CARD_WIDTH : -CARD_WIDTH,
+          behavior: 'smooth',
+        });
+      }
+    };
     // Check if topic is in wishlist
     const isInWishlist = (topicId) => wishlist.some((item) => item.id === topicId);
 
@@ -108,8 +118,10 @@ const Hero = () => {
       }
     };
 
+    
+
     const TopicCard = ({ topic }) => (
-      <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200 mx-2 my-4 relative min-h-[180px] w-full max-w-full flex flex-col sm:min-w-[220px] sm:max-w-xs">
+  <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200 m-2 relative min-h-[180px] flex flex-col min-w-[220px] max-w-xs">
         {/* Heart icon top-right (clickable, filled if in wishlist) */}
         <span
           className="absolute top-3 right-3 text-red-500 text-xl cursor-pointer"
@@ -126,11 +138,11 @@ const Hero = () => {
             </svg>
           )}
         </span>
-        <div className="flex flex-col items-start justify-start h-[70px] mb-2">
+        <div className="flex flex-col items-start justify-st</svg>art h-[70px] mb-2">
           <img src={topic.icon} alt={topic.title} className="w-14 h-14 object-contain" />
         </div>
         <div className={`border-l-4 ${topic.borderColor} pl-3 flex-1`}>
-          <h3 className={`text-md w-full font-bold mb-1 ${topic.textColor} leading-tight`}>{topic.title}</h3>
+          <h3 className={`text-sm w-full font-bold mb-1 ${topic.textColor} leading-tight`}>  {topic.title.length > 50 ? topic.title.slice(0, 15) + '...' : topic.title}</h3>
           <p className="text-base text-gray-600 mb-0 overflow-hidden text-ellipsis" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
             {topic.description}
           </p>
@@ -146,35 +158,31 @@ const Hero = () => {
       </div>
     );
 
-    // If only one topic, always use grid layout for left alignment
-    if (topics.length === 1) {
-      return (
-        <div className="grid grid-cols-1 gap-6">
-          <TopicCard key={topics[0].id} topic={topics[0]} />
-        </div>
-      );
-    }
-    // Otherwise use slider if enabled
-    if (useSlider && Slider) {
-      try {
-        return (
-          <Slider {...sliderSettings} className="gap-10">
-            {topics.map((topic) => (
-              <TopicCard key={topic.id} topic={topic} />
-            ))}
-          </Slider>
-        );
-      } catch (error) {
-        console.warn('Slider failed, falling back to grid:', error);
-        setUseSlider(false);
-      }
-    }
-    // Fallback grid layout for multiple topics
+    // Responsive grid for desktop/tablet, horizontal scroll for mobile
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {topics.map((topic) => (
-          <TopicCard key={topic.id} topic={topic} />
-        ))}
+      <div className="w-full relative">
+  <div className="absolute right-6 top-[-50px]  gap-2 z-10 hidden md:flex">
+          <button
+            className="bg-white border border-gray-300 rounded-full shadow px-3 py-2 text-lg font-bold hover:bg-blue-100"
+            onClick={() => scrollByCard('prev')}
+            aria-label="Previous"
+          >&#8249;</button>
+          <button
+            className="bg-white border border-gray-300 rounded-full shadow px-3 py-2 text-lg font-bold hover:bg-blue-100"
+            onClick={() => scrollByCard('next')}
+            aria-label="Next"
+          >&#8250;</button>
+        </div>
+        <div
+          ref={scrollRef}
+          className="flex overflow-x-auto no-scrollbar py-2"
+        >
+          {topics.map((topic) => (
+            <div className="flex-shrink-0 w-80 mr-4">
+              <TopicCard key={topic.id} topic={topic} />
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
