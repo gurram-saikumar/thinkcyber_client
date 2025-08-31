@@ -61,7 +61,8 @@ const SignupModal = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+   // debugger;
+     e.preventDefault();
     if (!form.firstName || !form.lastName || !form.email) {
       toast.error('Please fill all fields');
       return;
@@ -69,12 +70,11 @@ const SignupModal = ({ isOpen, onClose }) => {
     setLoading(true);
     try {
       const res = await authService.signupUser({
-        firstName: form.firstName,
-        lastName: form.lastName,
-        email: form.email 
-      });
-       
-       toast.success(res?.message || 'Signup successful!');
+        email: form.email,
+        firstname: form.firstName,
+        lastname: form.lastName
+      }); 
+      toast.success(res?.message || 'Signup successful!');
       setForm({ firstName: '', lastName: '', email: '' });
       onClose && onClose();
     } catch (err) {

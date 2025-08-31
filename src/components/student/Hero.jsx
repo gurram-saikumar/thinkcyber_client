@@ -94,6 +94,25 @@ const Hero = () => {
 
   // Component to render topics - either as slider or grid
   const TopicsDisplay = ({ topics }) => {
+    const [canScrollPrev, setCanScrollPrev] = React.useState(false);
+    const [canScrollNext, setCanScrollNext] = React.useState(true);
+    React.useEffect(() => {
+      const handleScroll = () => {
+        if (scrollRef.current) {
+          const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+          setCanScrollPrev(scrollLeft > 0);
+          setCanScrollNext(scrollLeft + clientWidth < scrollWidth - 1);
+        }
+      };
+      const ref = scrollRef.current;
+      if (ref) {
+        ref.addEventListener('scroll', handleScroll);
+        handleScroll();
+      }
+      return () => {
+        if (ref) ref.removeEventListener('scroll', handleScroll);
+      };
+    }, [topics]);
     const scrollRef = React.useRef(null);
     const CARD_WIDTH = 320; // px, matches w-80
     const scrollByCard = (direction) => {
@@ -163,15 +182,21 @@ const Hero = () => {
       <div className="w-full relative">
   <div className="absolute right-6 top-[-50px]  gap-2 z-10 hidden md:flex">
           <button
-            className="bg-white border border-gray-300 rounded-full shadow px-3 py-2 text-lg font-bold hover:bg-blue-100"
+            className={`w-12 h-12 flex items-center justify-center border-2 border-gray-400 rounded bg-white text-3xl font-bold transition-colors duration-200 ${!canScrollPrev ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
             onClick={() => scrollByCard('prev')}
             aria-label="Previous"
-          >&#8249;</button>
+            disabled={!canScrollPrev}
+          >
+            <span className="text-gray-600 text-4xl">&#8249;</span>
+          </button>
           <button
-            className="bg-white border border-gray-300 rounded-full shadow px-3 py-2 text-lg font-bold hover:bg-blue-100"
+            className={`w-12 h-12 flex items-center justify-center border-2 border-black rounded bg-blue-600 text-3xl font-bold transition-colors duration-200 ${!canScrollNext ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
             onClick={() => scrollByCard('next')}
             aria-label="Next"
-          >&#8250;</button>
+            disabled={!canScrollNext}
+          >
+            <span className="text-white text-4xl">&#8250;</span>
+          </button>
         </div>
         <div
           ref={scrollRef}

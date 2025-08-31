@@ -6,7 +6,7 @@ const API_VERSION = "/api";
 export const API_ENDPOINTS = {
   LOGIN: `${BASE_URL}${API_VERSION}/auth/send-otp`,
   VERIFY_OTP: `${BASE_URL}${API_VERSION}/auth/verify-otp`,
-  SIGNUP: `${BASE_URL}${API_VERSION}/auth//signup`,
+  SIGNUP: `${BASE_URL}${API_VERSION}/auth/signup`,
 
   // Homepage related endpoints
   HOMEPAGE: `${BASE_URL}${API_VERSION}/homepage`,
